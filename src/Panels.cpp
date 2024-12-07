@@ -128,9 +128,9 @@ void __fastcall Hooked_Paint(void* rcx, int mode)
 
         Vector vecWorld, vecScreen; //Setup the Vectors.
 
-        //pBaseLocalEnt->GetWorldSpaceCenter(vecWorld); //Get the center of the player.
+        pBaseLocalEnt->GetWorldSpaceCenter(vecWorld); //Get the center of the player.
 
-        vecWorld = pBaseLocalEnt->GetAbsOrigin();
+        //vecWorld = pBaseLocalEnt->GetAbsOrigin();
 
         if ( gDrawManager.WorldToScreen(vecWorld, vecScreen) ) //If the player is visble.
         {

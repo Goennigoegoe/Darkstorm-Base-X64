@@ -12,6 +12,7 @@
 //#include "VMTHooks.h" Not used anymore, now I'm using MinHook
 #include "Log.h"
 #include "../dependencies/MinHook/MinHook.h"
+#include "EntStuff.h"
 
 using namespace std;
 
@@ -56,17 +57,6 @@ typedef struct player_info_s
 	unsigned long	customFiles[4];
 	unsigned char	filesDownloaded;
 } player_info_t;
-
-class ClientClass
-{
-private:
-	BYTE _chPadding[8];
-public:
-	char* chName;
-	RecvTable* Table;
-	ClientClass* pNextClass;
-	int iClassID;
-};
 
 class CHLClient
 {
@@ -113,7 +103,8 @@ public:
 };
 
 /* Stuff in here might be broken, for example, the GetAbsOrigin might cause crashes */
-class CBaseEntity // ORIGINAL
+//class CBaseEntity // ORIGINAL
+class CBaseEntity : public IClientEntity
 {
 public:
 	Vector& GetAbsOrigin( )
@@ -133,7 +124,7 @@ public:
 		vWorldSpaceCenter = this->GetAbsOrigin();
 		vWorldSpaceCenter.z += (vMin.z + vMax.z) / 2;
 	}
-	DWORD* GetModel( )
+	/*DWORD* GetModel( )
 	{
 		PVOID pRenderable = (PVOID)(this + 0x4);
 		typedef DWORD* ( __thiscall* OriginalFn )( PVOID );
@@ -168,7 +159,7 @@ public:
 		PVOID pRenderable = (PVOID)(this + 0x4);
 		typedef void ( __thiscall* OriginalFn )( PVOID, Vector& , Vector& );
 		find_vfunc<OriginalFn>( pRenderable, 20 )( pRenderable, mins, maxs );
-	}
+	}*/
 };
 
 class EngineClient

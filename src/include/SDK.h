@@ -320,7 +320,7 @@ public:
   }
 };
 
-class CEntList
+/*class CEntList
 {
 public:
 	CBaseEntity* GetClientEntity( int entnum )
@@ -338,6 +338,20 @@ public:
 		typedef int ( __thiscall* OriginalFn )( PVOID );
 		return find_vfunc<OriginalFn>( this, 6 )( this );
 	}
+};*/
+
+class CEntList
+{
+public:
+  virtual IClientNetworkable* GetClientNetworkable(int entnum) = 0;
+	virtual IClientNetworkable* GetClientNetworkableFromHandle(DWORD hEnt) = 0;
+	virtual IClientUnknown* GetClientUnknownFromHandle(DWORD hEnt) = 0;
+	virtual IClientEntity* GetClientEntity(int entnum) = 0;
+	virtual IClientEntity* GetClientEntityFromHandle(DWORD hEnt) = 0;
+	virtual int NumberOfEntities(bool bIncludeNonNetworkable) = 0;
+	virtual int GetHighestEntityIndex(void) = 0;
+	virtual void SetMaxEntities(int maxents) = 0;
+	virtual int GetMaxEntities() = 0;
 };
 
 enum playercontrols

@@ -82,7 +82,7 @@ void __fastcall Hooked_PaintTraverse( void* rcx, int mode )
       
       if(gInts.Engine->IsInGame( ) || gInts.Engine->IsConnected())
       {
-        CBaseEntity* pBaseLocalEnt = gInts.EntList->GetClientEntity(me);  //Grab the local player's entity.
+        CBaseEntity* pBaseLocalEnt = gInts.EntList->GetClientEntity(me)->As<CBaseEntity>();  //Grab the local player's entity.
 
         if (pBaseLocalEnt == NULL) //Always check for null pointers.
           return;
@@ -121,7 +121,7 @@ void __fastcall Hooked_Paint(void* rcx, int mode)
       
       if(gInts.Engine->IsInGame( ) || gInts.Engine->IsConnected())
       {
-        CBaseEntity* pBaseLocalEnt = gInts.EntList->GetClientEntity(me);  //Grab the local player's entity.
+        CBaseEntity* pBaseLocalEnt = gInts.EntList->GetClientEntity(me)->As<CBaseEntity>();  //Grab the local player's entity.
 
         if (pBaseLocalEnt == NULL) //Always check for null pointers.
           return;
@@ -135,6 +135,32 @@ void __fastcall Hooked_Paint(void* rcx, int mode)
         if ( gDrawManager.WorldToScreen(vecWorld, vecScreen) ) //If the player is visble.
         {
           gDrawManager.DrawString( vecScreen.x, vecScreen.y, 0xFFFFFFFF, "You" ); //Draw on the player.
+        }
+
+        for(int i = 1; i < gInts.EntList->GetHighestEntityIndex(); i++)
+        {
+          CBaseEntity* pEnt = gInts.EntList->GetClientEntity(i)->As<CBaseEntity>();
+          if(pEnt == NULL || pEnt->IsDormant())
+            continue;
+
+          if(pEnt->entindex() == pBaseLocalEnt->entindex())
+            continue;
+
+          if(!pEnt->IsPlayer())
+          {
+            //std::cout << "Not A Player\n";
+          }
+
+          gDrawManager.DrawString( 50, 50, 0xFFFFFFFF, "Player" ); //Draw on the player.
+          
+          Vector pEntWorld, pEntScreen;
+          pEnt->GetWorldSpaceCenter(pEntWorld);
+
+          if ( gDrawManager.WorldToScreen(vecWorld, vecScreen) )
+          {
+            //printf("Pos: %.2f %.2f", pEntScreen.x, pEntScreen.y);
+            gDrawManager.DrawString( vecScreen.x, vecScreen.y, 0xFFFFFFFF, "Player" ); //Draw on the player.
+          }
         }
       }
     }

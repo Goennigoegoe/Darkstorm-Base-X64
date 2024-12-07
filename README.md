@@ -3,7 +3,8 @@
 A base for Team Fortress 2's 64-bit version, based off of the DarkStorm 2015 base. \
 Original base can be found at [DarkStorm-2015-Base](https://bitbucket.org/gir489/darkstorm-2015-base/src/master/). \
 This does not have any features other than some hooks and basic game stuff. \
-Some stuff may not work properly / may crash. 
+Some stuff may not work properly / may crash. \
+Looping through entities not working correctly. 
 
 ---
 
@@ -33,4 +34,5 @@ cmake --build build
 
 [gir489](https://www.unknowncheats.me/forum/members/5420895.html) [old account](https://www.unknowncheats.me/forum/members/225272.html) - The posted / latest coder of the project. \
 Kalvin - according to gir489 coding the original DarkStorm 2.6.1 base in [this post](https://www.unknowncheats.me/forum/team-fortress-2-a/74558-tf2-darkstorm-3-4-1-a.html) \
-[TsudaKageyu](https://github.com/TsudaKageyu) - Coder of [minhook](https://github.com/TsudaKageyu/minhook).
+[TsudaKageyu](https://github.com/TsudaKageyu) - Coder of [minhook](https://github.com/TsudaKageyu/minhook). \
+Rei-Kes - Some entity related classes. 

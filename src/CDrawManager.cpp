@@ -46,7 +46,7 @@ void CDrawManager::DrawString( int x, int y, DWORD dwColor, const char *pszText,
 	gInts.Surface->DrawPrintText( szString, wcslen( szString ) );
 }
 //===================================================================================
-byte CDrawManager::GetESPHeight( )
+unsigned char CDrawManager::GetESPHeight( )
 {
 	return ESP_HEIGHT;
 }

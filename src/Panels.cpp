@@ -1,9 +1,11 @@
 #include "include/SDK.h"
-#include "include/Panels.h"
+#include "include/Panels.hpp"
 #include "include/CDrawManager.h"
 
 CScreenSize gScreenSize;
 //===================================================================================
+typedef void(__fastcall* PaintTraverse_t)(void*, unsigned int, bool, bool);
+PaintTraverse_t oPaintTraverse = nullptr;
 void __fastcall Hooked_PaintTraverse( void* pPanels, unsigned int vguiPanel, bool forceRepaint, bool allowForce )
 {
 	try
@@ -69,4 +71,9 @@ void Intro( void )
 	{
 		Log::Fatal("Failed Intro");
 	}
+}
+
+void InitPaintTraverseHook()
+{
+  MH_CreateHook( getvfunc<LPVOID>(gInts.Panels, gOffsets.iPaintTraverseOffset), &Hooked_PaintTraverse, (void**)(&oPaintTraverse) ); // getvfunc thing might be incorrect but should be correctly done
 }

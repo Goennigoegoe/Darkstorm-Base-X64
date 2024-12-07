@@ -1,6 +1,6 @@
 #include "include/SDK.h"
-#include "include/Client.h"
-#include "include/Panels.h"
+#include "include/Client.hpp"
+#include "include/Panels.hpp"
 
 COffsets gOffsets;
 CPlayerVariables gPlayerVars;
@@ -50,7 +50,7 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 			if( gInts.Panels )
 			{
         /* Create PaintTraverse hook */
-        MH_CreateHook( (*static_cast<DWORD**>(gInts.Panels))[gOffsets.iPaintTraverseOffset], &Hooked_PaintTraverse, (void**)(&oPaintTraverse) ); // getvfunc thing might be incorrect but should be correctly done
+        InitPaintTraverseHook();
 				/*VMTBaseManager* panelHook = new VMTBaseManager(); //Setup our VMTBaseManager for Panels.
 				panelHook->Init(gInts.Panels);
 				panelHook->HookMethod(&Hooked_PaintTraverse, gOffsets.iPaintTraverseOffset);
@@ -58,13 +58,13 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 			}
 		}
 
-		DWORD dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05"); // This needs to be updated
+		DWORD dwClientModeAddress = gSignatures.GetClientSignature("48 8B 0D ? ? ? ? 48 8B 01 48 FF 60 ? CC CC 48 83 EC ? 48 8D 0D"); // This needs to be updated, Should be fixed now
 		XASSERT(dwClientModeAddress);
-		gInts.ClientMode = **(ClientModeShared***)(dwClientModeAddress + 2);
+		gInts.ClientMode = **(ClientModeShared***)(dwClientModeAddress + 0x2); // 0x2 should be fine but might need to add 0x3
 		LOGDEBUG("g_pClientModeShared_ptr client.dll+0x%X", (DWORD)gInts.ClientMode - dwClientBase);
 
     /* Create CreateMove hook */
-    MH_CreateHook( (*static_cast<DWORD**>(gInts.ClientMode))[gOffsets.iCreateMoveOffset], &Hooked_CreateMove, (void**)(&oCreateMove) );
+    InitCreateMove();
 
 		/*VMTBaseManager* clientModeHook = new VMTBaseManager(); //Setup our VMTBaseManager for ClientMode.
 		clientModeHook->Init(gInts.ClientMode);

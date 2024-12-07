@@ -17,5 +17,5 @@ public:
 class COffsets
 {
 public:
-	int iCreateMoveOffset = 20, iPaintTraverseOffset = 41;
+	unsigned int iCreateMoveOffset = 21u, iPaintTraverseOffset = 41u;
 };

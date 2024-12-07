@@ -15,4 +15,9 @@ inline Fn getvfunc( const void* inst, size_t index, size_t offset = 0 )
 {
 	return reinterpret_cast<Fn>( getvtable( inst, offset )[ index ] );
 }
+template< typename Fn >
+inline Fn getvfunc( void* inst, const unsigned short index )
+{
+	return reinterpret_cast<Fn>( getvtable( inst, 0 )[ index ] );
+}
 //===================================================================================

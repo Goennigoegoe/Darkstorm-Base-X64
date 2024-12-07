@@ -103,7 +103,7 @@ public:
 	float sidemove; //1C
 	float upmove; //20
 	int	buttons; //24
-	byte impulse; //28
+	unsigned char impulse; //28
 	int weaponselect; //2C
 	int weaponsubtype; //30
 	int random_seed; //34

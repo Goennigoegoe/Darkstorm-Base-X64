@@ -1,7 +1,7 @@
 #pragma once
 //===================================================================================
 #include "SDK.h"
-#include "Panels.h"
+#include "Panels.hpp"
 
 #define RED(COLORCODE)	((int) ( COLORCODE >> 24) )
 #define BLUE(COLORCODE)	((int) ( COLORCODE >> 8 ) & 0xFF )
@@ -15,7 +15,7 @@ public:
 	void Initialize( );
 	void DrawString( int x, int y, DWORD dwColor, const wchar_t *pszText);
 	void DrawString( int x, int y, DWORD dwColor, const char *pszText, ... );
-	byte GetESPHeight( );
+	unsigned char GetESPHeight( );
 	int GetPixelTextSize ( const char *pszText );
 	int GetPixelTextSize ( wchar_t *pszText );
 	void DrawBox( Vector vOrigin, int r, int g, int b, int alpha, int box_width, int radius );

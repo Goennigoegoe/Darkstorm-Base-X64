@@ -1,4 +1,5 @@
 #include "SDK.h"
+#include <cmath>
 
 #pragma once
 
@@ -201,11 +202,13 @@ inline float Vector::Length(void) const
 
 	float sqsr = x*x + y*y + z*z;
 
-	__asm
+	/*__asm
 	{
 		sqrtss xmm0, sqsr
 		movss root, xmm0
-	}
+	}*/
+
+  root = std::sqrtf(sqsr);
 
 	return root;
 }
@@ -218,11 +221,13 @@ inline float Vector::Length2D(void) const
 
 	float sqst = x*x + y*y;
 
-	__asm
+	/*__asm
 	{
 		sqrtss xmm0, sqst
 		movss root, xmm0
-	}
+	}*/
+
+  root = std::sqrtf(sqst);
 
 	return root;
 }

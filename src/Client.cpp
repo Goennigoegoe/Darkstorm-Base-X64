@@ -32,6 +32,6 @@ bool __fastcall Hooked_CreateMove(void* ClientMode, float input_sample_frametime
 
 void InitCreateMove()
 {
-    MH_CreateHook( getvfunc<LPVOID>(gInts.ClientMode, gOffsets.iCreateMoveOffset), &Hooked_CreateMove, (void**)(&oCreateMove) );
+    MH_CreateHook( find_vfunc<LPVOID>(gInts.ClientMode, gOffsets.iCreateMoveOffset), &Hooked_CreateMove, (void**)(&oCreateMove) );
 }
 //============================================================================================

@@ -2,19 +2,23 @@
 #include "include/Panels.hpp"
 #include "include/CDrawManager.h"
 
+#include <iostream>
+
 CScreenSize gScreenSize;
+
 //===================================================================================
-typedef void(__fastcall* PaintTraverse_t)(void*, unsigned int, bool, bool);
+typedef void(__fastcall* PaintTraverse_t)(void*, int);
 PaintTraverse_t oPaintTraverse = nullptr;
-void __fastcall Hooked_PaintTraverse( void* pPanels, unsigned int vguiPanel, bool forceRepaint, bool allowForce )
+void __fastcall Hooked_PaintTraverse( void* rcx, int mode )
 {
-	try
+	/*try
 	{
 		//VMTManager& hook = VMTManager::GetHook(pPanels); //Get a pointer to the instance of your VMTManager with the function GetHook.
 		//hook.GetMethod<void(__thiscall*)(PVOID, unsigned int, bool, bool)>(gOffsets.iPaintTraverseOffset)(pPanels, vguiPanel, forceRepaint, allowForce); //Call the original.
-    oPaintTraverse(pPanels, vguiPanel, forceRepaint, allowForce);
 
 		static unsigned int vguiMatSystemTopPanel;
+
+    std::cout << "Bruh\n";
 
 		if (vguiMatSystemTopPanel == NULL)
 		{
@@ -51,12 +55,48 @@ void __fastcall Hooked_PaintTraverse( void* pPanels, unsigned int vguiPanel, boo
 			{
 				gDrawManager.DrawString( vecScreen.x, vecScreen.y, 0xFFFFFFFF, "You" ); //Draw on the player.
 			}
+
+      oPaintTraverse(pPanels, vguiPanel, forceRepaint, allowForce);
 		}
 	}
 	catch(...)
 	{
 		Log::Fatal("Failed PaintTraverse");
-	}
+	}*/
+
+  // Replaced with engine vgui paint
+  oPaintTraverse(rcx, mode);
+
+  static bool FirstInitialize = true;
+  if (FirstInitialize)
+  {
+    Intro();
+    FirstInitialize = false;
+  }
+
+  gInts.Surface->StartDrawing();
+  {
+		gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm"); //Remove this if you want.
+  }
+  gInts.Surface->FinishDrawing();
+}
+
+void __fastcall Hooked_Paint(void* rcx, int mode)
+{
+  oPaintTraverse(rcx, mode);
+
+  static bool FirstInitialize = true;
+  if (FirstInitialize)
+  {
+    Intro();
+    FirstInitialize = false;
+  }
+
+  gInts.Surface->StartDrawing();
+  {
+		gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm"); //Remove this if you want.
+  }
+  gInts.Surface->FinishDrawing();
 }
 //===================================================================================
 void Intro( void )
@@ -75,5 +115,6 @@ void Intro( void )
 
 void InitPaintTraverseHook()
 {
-  MH_CreateHook( getvfunc<LPVOID>(gInts.Panels, gOffsets.iPaintTraverseOffset), &Hooked_PaintTraverse, (void**)(&oPaintTraverse) ); // getvfunc thing might be incorrect but should be correctly done
+  MH_CreateHook( find_vfunc<LPVOID>(gInts.EngineVGui, 14), &Hooked_Paint, (void**)(&oPaintTraverse) ); // getvfunc thing might be incorrect but should be correctly done
+  std::cout << "Function called but not doing shit\n";
 }

@@ -5,10 +5,10 @@
 class CSignature
 {
 public:
-	DWORD dwFindPattern(DWORD dwAddress, DWORD dwLength, const char* szPattern);
+	DWORD dwFindPattern(const char* module_name, const char* signature);
 	HMODULE GetModuleHandleSafe( const char* pszModuleName );
-	DWORD GetClientSignature ( char* chPattern );
-	DWORD GetEngineSignature ( char* chPattern );
+	DWORD GetClientSignature ( const char* chPattern );
+	DWORD GetEngineSignature ( const char* chPattern );
 
   /*template <typename T>
 	inline T GetVFunc( void* ptr, const unsigned short index )

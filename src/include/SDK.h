@@ -74,7 +74,7 @@ public:
 	ClientClass* GetAllClasses( void )
 	{
 		typedef ClientClass* ( __thiscall* OriginalFn )( PVOID ); //Anything inside a VTable is a __thiscall unless it completly disregards the thisptr. You can also call them as __stdcalls, but you won't have access to the __thisptr.
-		return getvfunc<OriginalFn>( this, 8 )( this ); //Return the pointer to the head CClientClass.
+		return find_vfunc<OriginalFn>( this, 8 )( this ); //Return the pointer to the head CClientClass.
 	}
 };
 
@@ -119,12 +119,12 @@ public:
 	Vector& GetAbsOrigin( )
 	{
 		typedef Vector& ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>(this, 9)(this);
+		return find_vfunc<OriginalFn>(this, 9)(this);
 	}
 	Vector& GetAbsAngles( )
 	{
 		typedef Vector& ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>(this, 10)(this);
+		return find_vfunc<OriginalFn>(this, 10)(this);
 	}
 	void GetWorldSpaceCenter( Vector& vWorldSpaceCenter)
 	{
@@ -137,37 +137,37 @@ public:
 	{
 		PVOID pRenderable = (PVOID)(this + 0x4);
 		typedef DWORD* ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( pRenderable, 9 )( pRenderable );
+		return find_vfunc<OriginalFn>( pRenderable, 9 )( pRenderable );
 	}
 	bool SetupBones( matrix3x4 *pBoneToWorldOut, int nMaxBones, int boneMask, float currentTime )
 	{
 		PVOID pRenderable = (PVOID)(this + 0x4);
 		typedef bool ( __thiscall* OriginalFn )( PVOID, matrix3x4*, int, int, float );
-		return getvfunc<OriginalFn>( pRenderable, 16 )( pRenderable, pBoneToWorldOut, nMaxBones, boneMask, currentTime );
+		return find_vfunc<OriginalFn>( pRenderable, 16 )( pRenderable, pBoneToWorldOut, nMaxBones, boneMask, currentTime );
 	}
 	ClientClass* GetClientClass( )
 	{
 		PVOID pNetworkable = (PVOID)(this + 0x8);
 		typedef ClientClass* ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( pNetworkable, 2 )( pNetworkable );
+		return find_vfunc<OriginalFn>( pNetworkable, 2 )( pNetworkable );
 	}
 	bool IsDormant( )
 	{
 		PVOID pNetworkable = (PVOID)(this + 0x8);
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( pNetworkable, 8 )( pNetworkable );
+		return find_vfunc<OriginalFn>( pNetworkable, 8 )( pNetworkable );
 	}
 	int GetIndex( )
 	{
 		PVOID pNetworkable = (PVOID)(this + 0x8);
 		typedef int ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( pNetworkable, 9 )( pNetworkable );
+		return find_vfunc<OriginalFn>( pNetworkable, 9 )( pNetworkable );
 	}
 	void GetRenderBounds( Vector& mins, Vector& maxs )
 	{
 		PVOID pRenderable = (PVOID)(this + 0x4);
 		typedef void ( __thiscall* OriginalFn )( PVOID, Vector& , Vector& );
-		getvfunc<OriginalFn>( pRenderable, 20 )( pRenderable, mins, maxs );
+		find_vfunc<OriginalFn>( pRenderable, 20 )( pRenderable, mins, maxs );
 	}
 };
 
@@ -177,77 +177,77 @@ public:
 	void GetScreenSize( int& width, int& height )
 	{
 		typedef void ( __thiscall* OriginalFn )( PVOID, int& , int& );
-		return getvfunc<OriginalFn>( this, 5 )( this, width, height );
+		return find_vfunc<OriginalFn>( this, 5 )( this, width, height );
 	}
 	bool GetPlayerInfo( int ent_num, player_info_t *pinfo )
 	{
 		typedef bool ( __thiscall* OriginalFn )( PVOID, int, player_info_t * );
-		return getvfunc<OriginalFn>(this, 8)(this, ent_num, pinfo );
+		return find_vfunc<OriginalFn>(this, 8)(this, ent_num, pinfo );
 	}
 	bool Con_IsVisible( void )
 	{
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 11 )( this );
+		return find_vfunc<OriginalFn>( this, 11 )( this );
 	}
 	int GetLocalPlayer( void )
 	{
 		typedef int ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 12 )( this );
+		return find_vfunc<OriginalFn>( this, 12 )( this );
 	}
 	float Time( void )
 	{
 		typedef float ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 14 )( this );
+		return find_vfunc<OriginalFn>( this, 14 )( this );
 	}
 	void GetViewAngles( Vector& va )
 	{
 		typedef void ( __thiscall* OriginalFn )( PVOID, Vector& va );
-		return getvfunc<OriginalFn>( this, 19 )( this, va );
+		return find_vfunc<OriginalFn>( this, 19 )( this, va );
 	}
 	void SetViewAngles( Vector& va )
 	{
 		typedef void ( __thiscall* OriginalFn )( PVOID, Vector& va );
-		return getvfunc<OriginalFn>( this, 20 )( this, va );
+		return find_vfunc<OriginalFn>( this, 20 )( this, va );
 	}
 	int GetMaxClients( void )
 	{
 		typedef int ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 21 )( this );
+		return find_vfunc<OriginalFn>( this, 21 )( this );
 	}
 	bool IsInGame( void )
 	{
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 26 )( this );
+		return find_vfunc<OriginalFn>( this, 26 )( this );
 	}
 	bool IsConnected( void )
 	{
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 27 )( this );
+		return find_vfunc<OriginalFn>( this, 27 )( this );
 	}
 	bool IsDrawingLoadingImage( void )
 	{
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 28 )( this );
+		return find_vfunc<OriginalFn>( this, 28 )( this );
 	}
 	const matrix3x4& WorldToScreenMatrix( void )
 	{
 		typedef const matrix3x4& ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>(this, 36)(this);
+		return find_vfunc<OriginalFn>(this, 36)(this);
 	}
 	bool IsTakingScreenshot( void )
 	{
 		typedef bool ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 85 )( this );
+		return find_vfunc<OriginalFn>( this, 85 )( this );
 	}
 	DWORD* GetNetChannelInfo( void )
 	{
 		typedef DWORD* ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 72 )( this );
+		return find_vfunc<OriginalFn>( this, 72 )( this );
 	}
 	void ClientCmd_Unrestricted( const char* chCommandString )
 	{
 		typedef void ( __thiscall* OriginalFn )( PVOID, const char * );
-		return getvfunc<OriginalFn>( this, 106 )( this, chCommandString );
+		return find_vfunc<OriginalFn>( this, 106 )( this, chCommandString );
 	}
 };
 
@@ -257,7 +257,7 @@ public:
 	const char *GetName(unsigned int vguiPanel)
 	{
 		typedef const char* ( __thiscall* OriginalFn )( PVOID, unsigned int );
-		return getvfunc<OriginalFn>( this, 36 )( this, vguiPanel );
+		return find_vfunc<OriginalFn>( this, 36 )( this, vguiPanel );
 	}
 };
 
@@ -267,53 +267,64 @@ public:
 	void DrawSetColor(int r, int g, int b, int a)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, int, int, int, int);
-		getvfunc<OriginalFn>(this, 11)(this, r, g, b, a);
+		find_vfunc<OriginalFn>(this, 11)(this, r, g, b, a);
 	}
 	void DrawFilledRect(int x0, int y0, int x1, int y1)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, int, int, int, int);
-		getvfunc<OriginalFn>(this, 12)(this, x0, y0, x1, y1);
+		find_vfunc<OriginalFn>(this, 12)(this, x0, y0, x1, y1);
 	}
 	void DrawOutlinedRect(int x0, int y0, int x1, int y1)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, int, int, int, int);
-		getvfunc<OriginalFn>(this, 14)(this, x0, y0, x1, y1);
+		find_vfunc<OriginalFn>(this, 14)(this, x0, y0, x1, y1);
 	}
 	void DrawSetTextFont(unsigned long font)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, unsigned long);
-		getvfunc<OriginalFn>(this, 17)(this, font);
+		find_vfunc<OriginalFn>(this, 17)(this, font);
 	}
 	void DrawSetTextColor(int r, int g, int b, int a)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, int, int, int, int);
-		getvfunc<OriginalFn>(this, 19)(this, r, g, b, a);
+		find_vfunc<OriginalFn>(this, 19)(this, r, g, b, a);
 	}
 	void DrawSetTextPos(int x, int y)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, int, int);
-		getvfunc<OriginalFn>(this, 20)(this, x, y);
+		find_vfunc<OriginalFn>(this, 20)(this, x, y);
 	}
 	void DrawPrintText(const wchar_t *text, int textLen)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, const wchar_t *, int, int);
-		return getvfunc<OriginalFn>(this, 22)(this, text, textLen, 0);
+		return find_vfunc<OriginalFn>(this, 22)(this, text, textLen, 0);
 	}
 	unsigned long CreateFont()
 	{
 		typedef unsigned int(__thiscall* OriginalFn)(PVOID);
-		return getvfunc<OriginalFn>(this, 66)(this);
+		return find_vfunc<OriginalFn>(this, 66)(this);
 	}
 	void SetFontGlyphSet(unsigned long &font, const char *windowsFontName, int tall, int weight, int blur, int scanlines, int flags)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, unsigned long, const char*, int, int, int, int, int, int, int);
-		getvfunc<OriginalFn>(this, 67)(this, font, windowsFontName, tall, weight, blur, scanlines, flags, 0, 0);
+		find_vfunc<OriginalFn>(this, 67)(this, font, windowsFontName, tall, weight, blur, scanlines, flags, 0, 0);
 	}
 	void GetTextSize(unsigned long font, const wchar_t *text, int &wide, int &tall)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, unsigned long, const wchar_t *, int&, int&);
-		getvfunc<OriginalFn>(this, 75)(this, font, text, wide, tall);
+		find_vfunc<OriginalFn>(this, 75)(this, font, text, wide, tall);
 	}
+  void StartDrawing()
+  {
+    static uintptr_t offset = gSignatures.dwFindPattern("vguimatsurface.dll", "40 53 56 57 48 83 EC ? 48 8B F9 80 3D");
+    reinterpret_cast<void(__thiscall*)(void*)>(offset)(this);
+  }
+
+  void FinishDrawing()
+  {
+    static uintptr_t offset = gSignatures.dwFindPattern("vguimatsurface.dll", "40 53 48 83 EC ? 33 C9");
+    reinterpret_cast<void(__thiscall*)(void*)>(offset)(this);
+  }
 };
 
 class CEntList
@@ -322,17 +333,17 @@ public:
 	CBaseEntity* GetClientEntity( int entnum )
 	{
 		typedef CBaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
-		return getvfunc<OriginalFn>( this, 3 )( this, entnum );
+		return find_vfunc<OriginalFn>( this, 3 )( this, entnum );
 	}
 	CBaseEntity* GetClientEntityFromHandle( int hEnt )
 	{
 		typedef CBaseEntity* ( __thiscall* OriginalFn )( PVOID, int );
-		return getvfunc<OriginalFn>( this, 4 )( this, hEnt );
+		return find_vfunc<OriginalFn>( this, 4 )( this, hEnt );
 	}
 	int GetHighestEntityIndex(void)
 	{
 		typedef int ( __thiscall* OriginalFn )( PVOID );
-		return getvfunc<OriginalFn>( this, 6 )( this );
+		return find_vfunc<OriginalFn>( this, 6 )( this );
 	}
 };
 
@@ -478,13 +489,55 @@ public:
 	bool IsChatPanelOutOfFocus(void)
 	{
 		typedef PVOID(__thiscall* OriginalFn)(PVOID);
-		PVOID CHudChat = getvfunc<OriginalFn>(this, 19)(this);
+		PVOID CHudChat = find_vfunc<OriginalFn>(this, 19)(this);
 		if (CHudChat)
 		{
 			return *(PFLOAT)((DWORD)CHudChat + 0xFC) == 0;
 		}
 		return false;
 	}
+};
+
+/*class CMatSystemSurface
+{
+public:
+  void SurfaceStartDrawing()
+  {
+    static uintptr_t offset = gSignature.dwFindPattern("vguimatsurface.dll", "40 53 56 57 48 83 EC ? 48 8B F9 80 3D");
+    reinterpret_cast<void(__thiscall*)(void*)>(offset)(this);
+  }
+
+  void SurfaceFinishDrawing()
+  {
+    static uintptr_t offset = gSignature.dwFindPattern("vguimatsurface.dll", "40 53 48 83 EC ? 33 C9");
+    reinterpret_cast<void(__thiscall*)(void*)>(offset)(this);
+  }
+};*/
+
+enum VGuiPanel_t
+{
+	PANEL_ROOT = 0,
+	PANEL_GAMEUIDLL,
+	PANEL_CLIENTDLL,
+	PANEL_TOOLS,
+	PANEL_INGAMESCREENS,
+	PANEL_GAMEDLL,
+	PANEL_CLIENTDLL_TOOLS
+};
+
+enum PaintMode_t
+{
+	PAINT_UIPANELS = (1 << 0),
+	PAINT_INGAMEPANELS = (1 << 1),
+	PAINT_CURSOR = (1 << 2),
+};
+
+class IEngineVGui
+{
+public:
+	virtual					~IEngineVGui(void) { }
+	virtual unsigned int			GetPanel(VGuiPanel_t type) = 0;
+	virtual bool			IsGameUIVisible() = 0;
 };
 
 class CInterfaces
@@ -496,6 +549,8 @@ public:
 	ISurface* Surface;
 	ClientModeShared* ClientMode;
 	CHLClient* Client;
+  IEngineVGui* EngineVGui;
+  //CMatSystemSurface* MatSystemSurface;
 };
 
 extern CInterfaces gInts;

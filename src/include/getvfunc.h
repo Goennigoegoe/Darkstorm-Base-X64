@@ -20,4 +20,8 @@ inline Fn getvfunc( void* inst, const unsigned short index )
 {
 	return reinterpret_cast<Fn>( getvtable( inst, 0 )[ index ] );
 }
+
+template <typename T> inline T find_vfunc(void* vmt, unsigned int index) {
+    return (*static_cast<T**>(vmt))[index]; // create an array of pointers
+}
 //===================================================================================

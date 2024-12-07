@@ -1,6 +1,6 @@
-#include "SDK.h"
-#include "Client.h"
-#include "Panels.h"
+#include "include/SDK.h"
+#include "include/Client.h"
+#include "include/Panels.h"
 
 COffsets gOffsets;
 CPlayerVariables gPlayerVars;
@@ -13,6 +13,17 @@ CreateInterface_t VGUI2Factory = NULL;
 
 DWORD WINAPI dwMainThread( LPVOID lpArguments )
 {
+  /* Initialize MinHook */
+  if( MH_Initialize() != MH_OK )
+  {
+    if( MessageBox( 0, "Minhook failed to initialize", "DarkStorm", MB_OK ) )
+    {
+      return 1;
+    }
+  }
+
+  Sleep(50); // wait 50 ms, not sure if needed but in my older project it waits 50 ms after initializing MinHook
+
 	if (gInts.Client == NULL) //Prevent repeat callings.
 	{
 		//Gottammove those factorys up.
@@ -23,7 +34,7 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		gInts.EntList = ( CEntList* ) ClientFactory( "VClientEntityList003", NULL );
 		XASSERT(gInts.EntList);
 		EngineFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "engine.dll" ), "CreateInterface" );
-		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient013", NULL );
+		gInts.Engine = ( EngineClient* ) EngineFactory( "VEngineClient014", NULL );
 		XASSERT(gInts.Engine);
 		VGUIFactory = ( CreateInterfaceFn ) GetProcAddress( gSignatures.GetModuleHandleSafe( "vguimatsurface.dll" ), "CreateInterface" );
 		gInts.Surface = ( ISurface* ) VGUIFactory( "VGUI_Surface030", NULL );
@@ -38,22 +49,27 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 
 			if( gInts.Panels )
 			{
-				VMTBaseManager* panelHook = new VMTBaseManager(); //Setup our VMTBaseManager for Panels.
+        /* Create PaintTraverse hook */
+        MH_CreateHook( (*static_cast<DWORD**>(gInts.Panels))[gOffsets.iPaintTraverseOffset], &Hooked_PaintTraverse, (void**)(&oPaintTraverse) ); // getvfunc thing might be incorrect but should be correctly done
+				/*VMTBaseManager* panelHook = new VMTBaseManager(); //Setup our VMTBaseManager for Panels.
 				panelHook->Init(gInts.Panels);
 				panelHook->HookMethod(&Hooked_PaintTraverse, gOffsets.iPaintTraverseOffset);
-				panelHook->Rehook();
+				panelHook->Rehook();*/
 			}
 		}
 
-		DWORD dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05");
+		DWORD dwClientModeAddress = gSignatures.GetClientSignature("8B 0D ? ? ? ? 8B 02 D9 05"); // This needs to be updated
 		XASSERT(dwClientModeAddress);
 		gInts.ClientMode = **(ClientModeShared***)(dwClientModeAddress + 2);
 		LOGDEBUG("g_pClientModeShared_ptr client.dll+0x%X", (DWORD)gInts.ClientMode - dwClientBase);
 
-		VMTBaseManager* clientModeHook = new VMTBaseManager(); //Setup our VMTBaseManager for ClientMode.
+    /* Create CreateMove hook */
+    MH_CreateHook( (*static_cast<DWORD**>(gInts.ClientMode))[gOffsets.iCreateMoveOffset], &Hooked_CreateMove, (void**)(&oCreateMove) );
+
+		/*VMTBaseManager* clientModeHook = new VMTBaseManager(); //Setup our VMTBaseManager for ClientMode.
 		clientModeHook->Init(gInts.ClientMode);
 		clientModeHook->HookMethod(&Hooked_CreateMove, gOffsets.iCreateMoveOffset); //ClientMode create move is called inside of CHLClient::CreateMove, and thus no need for hooking WriteUserCmdDelta.
-		clientModeHook->Rehook();
+		clientModeHook->Rehook();*/
 	}
 	return 0; //The thread has been completed, and we do not need to call anything once we're done. The call to Hooked_PaintTraverse is now our main thread.
 }

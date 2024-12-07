@@ -1,15 +1,16 @@
-#include "SDK.h"
-#include "Panels.h"
-#include "CDrawManager.h"
+#include "include/SDK.h"
+#include "include/Panels.h"
+#include "include/CDrawManager.h"
 
 CScreenSize gScreenSize;
 //===================================================================================
-void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiPanel, bool forceRepaint, bool allowForce )
+void __fastcall Hooked_PaintTraverse( void* pPanels, unsigned int vguiPanel, bool forceRepaint, bool allowForce )
 {
 	try
 	{
-		VMTManager& hook = VMTManager::GetHook(pPanels); //Get a pointer to the instance of your VMTManager with the function GetHook.
-		hook.GetMethod<void(__thiscall*)(PVOID, unsigned int, bool, bool)>(gOffsets.iPaintTraverseOffset)(pPanels, vguiPanel, forceRepaint, allowForce); //Call the original.
+		//VMTManager& hook = VMTManager::GetHook(pPanels); //Get a pointer to the instance of your VMTManager with the function GetHook.
+		//hook.GetMethod<void(__thiscall*)(PVOID, unsigned int, bool, bool)>(gOffsets.iPaintTraverseOffset)(pPanels, vguiPanel, forceRepaint, allowForce); //Call the original.
+    oPaintTraverse(pPanels, vguiPanel, forceRepaint, allowForce);
 
 		static unsigned int vguiMatSystemTopPanel;
 

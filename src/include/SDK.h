@@ -9,8 +9,9 @@
 #include "CSignature.h"
 #include "WeaponList.h"
 #include "CGlobalVars.h"
-#include "VMTHooks.h"
+//#include "VMTHooks.h" Not used anymore, now I'm using MinHook
 #include "Log.h"
+#include "../dependencies/MinHook/MinHook.h"
 
 using namespace std;
 
@@ -111,6 +112,7 @@ public:
 	bool hasbeenpredicted; //3C;
 };
 
+/* Stuff in here might be broken, for example, the GetAbsOrigin might cause crashes */
 class CBaseEntity // ORIGINAL
 {
 public:

@@ -2,4 +2,6 @@
 
 #include "SDK.h"
 
-bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_frametime, CUserCmd* pCommand);
+typedef bool(__fastcall* CreateMove_t)(void* ClientMode, float input_sample_frametime, CUserCmd* pCommand);
+CreateMove_t oCreateMove = nullptr;
+bool __fastcall Hooked_CreateMove(void* ClientMode, float input_sample_frametime, CUserCmd* pCommand);

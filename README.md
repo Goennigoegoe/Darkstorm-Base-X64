@@ -24,7 +24,7 @@ Open a command prompt in the directory that has CMakeLists.txt \
 Then run the following commands to build the project:
 
 ```bash
-cmake -B build -DCMAKE_BUILD_TYPE=Release
+cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=x64
 cmake --build build
 ```
 

@@ -1,12 +1,13 @@
-#include "SDK.h"
-#include "Client.h"
+#include "include/SDK.h"
+#include "include/Client.h"
 
 //============================================================================================
-bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_frametime, CUserCmd* pCommand)
+bool __fastcall Hooked_CreateMove(void* ClientMode, float input_sample_frametime, CUserCmd* pCommand)
 {
 	//If you want taunt slide, you will need to hook CHLClient::CreateMove and do it there. If you do it here, you'll just shimmy forward.
-	VMTManager& hook = VMTManager::GetHook(ClientMode); //Get a pointer to the instance of your VMTManager with the function GetHook.
-	bool bReturn = hook.GetMethod<bool(__thiscall*)(PVOID, float, CUserCmd*)>(gOffsets.iCreateMoveOffset)(ClientMode, input_sample_frametime, pCommand); //Call the original.
+	//VMTManager& hook = VMTManager::GetHook(ClientMode); //Get a pointer to the instance of your VMTManager with the function GetHook.
+	//bool bReturn = hook.GetMethod<bool(__thiscall*)(PVOID, float, CUserCmd*)>(gOffsets.iCreateMoveOffset)(ClientMode, input_sample_frametime, pCommand); //Call the original.
+  bool bReturn = oCreateMove(ClientMode, input_sample_frametime, pCommand);
 	try
 	{
 		/*CBaseEntity* pBaseEntity = GetBaseEntity(me); //Grab the local player's entity pointer.

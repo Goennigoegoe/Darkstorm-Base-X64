@@ -78,7 +78,24 @@ void __fastcall Hooked_PaintTraverse( void* rcx, int mode )
   {
     gInts.Surface->StartDrawing();
     {
-      gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm"); //Remove this if you want.
+      gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm");
+      
+      if(gInts.Engine->IsInGame( ) || gInts.Engine->IsConnected())
+      {
+        CBaseEntity* pBaseLocalEnt = gInts.EntList->GetClientEntity(me);  //Grab the local player's entity.
+
+        if (pBaseLocalEnt == NULL) //Always check for null pointers.
+          return;
+
+        Vector vecWorld, vecScreen; //Setup the Vectors.
+
+        pBaseLocalEnt->GetWorldSpaceCenter(vecWorld); //Get the center of the player.
+
+        if ( gDrawManager.WorldToScreen(vecWorld, vecScreen) ) //If the player is visble.
+        {
+          gDrawManager.DrawString( vecScreen.x, vecScreen.y, 0xFFFFFFFF, "You" ); //Draw on the player.
+        }
+      }
     }
     gInts.Surface->FinishDrawing();
   }
@@ -95,11 +112,34 @@ void __fastcall Hooked_Paint(void* rcx, int mode)
     FirstInitialize = false;
   }
 
-  gInts.Surface->StartDrawing();
+
+  if(mode & PAINT_UIPANELS)
   {
-		gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm"); //Remove this if you want.
+    gInts.Surface->StartDrawing();
+    {
+      gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm");
+      
+      if(gInts.Engine->IsInGame( ) || gInts.Engine->IsConnected())
+      {
+        CBaseEntity* pBaseLocalEnt = gInts.EntList->GetClientEntity(me);  //Grab the local player's entity.
+
+        if (pBaseLocalEnt == NULL) //Always check for null pointers.
+          return;
+
+        Vector vecWorld, vecScreen; //Setup the Vectors.
+
+        //pBaseLocalEnt->GetWorldSpaceCenter(vecWorld); //Get the center of the player.
+
+        vecWorld = pBaseLocalEnt->GetAbsOrigin();
+
+        if ( gDrawManager.WorldToScreen(vecWorld, vecScreen) ) //If the player is visble.
+        {
+          gDrawManager.DrawString( vecScreen.x, vecScreen.y, 0xFFFFFFFF, "You" ); //Draw on the player.
+        }
+      }
+    }
+    gInts.Surface->FinishDrawing();
   }
-  gInts.Surface->FinishDrawing();
 }
 //===================================================================================
 void Intro( void )
@@ -119,5 +159,5 @@ void Intro( void )
 void InitPaintTraverseHook()
 {
   MH_CreateHook( find_vfunc<LPVOID>(gInts.EngineVGui, 14), &Hooked_Paint, (void**)(&oPaintTraverse) ); // getvfunc thing might be incorrect but should be correctly done
-  std::cout << "Function called but not doing shit\n";
+  //std::cout << "Function called but not doing shit\n";
 }

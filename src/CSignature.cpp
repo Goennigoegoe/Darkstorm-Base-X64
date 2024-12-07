@@ -1,13 +1,14 @@
 #include "include/sdk.h"
 #include <time.h>
 
+#include <psapi.h>
 #include <vector>
 
 #define INRANGE(x,a,b)    (x >= a && x <= b) 
 #define getBits( x )    (INRANGE((x&(~0x20)),'A','F') ? ((x&(~0x20)) - 'A' + 0xa) : (INRANGE(x,'0','9') ? x - '0' : 0))
 #define getByte( x )    (getBits(x[0]) << 4 | getBits(x[1]))
 
-DWORD CSignature::dwFindPattern(const char* module_name, const char* signature)
+uintptr_t CSignature::dwFindPattern(const char* module_name, const char* signature)
 {
 	/*const char* pat = szPattern;
 	DWORD firstMatch = NULL;
@@ -27,7 +28,7 @@ DWORD CSignature::dwFindPattern(const char* module_name, const char* signature)
 	}
 	return NULL;*/
 
-  if ( const auto module_handle = GetModuleHandleA( module_name ) ) {
+  /*if ( const auto module_handle = GetModuleHandleA( module_name ) ) {
 			static auto signature_to_byte = [ ] ( const char* signature ) {
 				auto bytes = std::vector< int >{ };
 				auto start = const_cast< char* >( signature );
@@ -74,7 +75,77 @@ DWORD CSignature::dwFindPattern(const char* module_name, const char* signature)
 			}
 		}
 
-		return (DWORD)0x0;
+		return (DWORD)0x0;*/
+
+  auto sigToBytes = [](const char* const sig) -> std::vector<int>
+  {
+      std::vector<int> bytes{};
+
+      char* const start{ const_cast<char*>(sig) };
+      char* const end{ const_cast<char*>(sig) + strlen(sig) };
+
+      for (char* current{ start }; current < end; ++current)
+      {
+          if (*current == '?')
+          {
+              ++current;
+
+              if (*current == '?') {
+                  ++current;
+              }
+
+              bytes.push_back(-1);
+          }
+
+          else {
+              bytes.push_back(strtoul(current, &current, 16));
+          }
+      }
+
+      return bytes;
+  };
+
+  const HMODULE hmod{ GetModuleHandleA(module_name) };
+
+  if (!hmod) {
+      return 0;
+  }
+
+  MODULEINFO mod_info{};
+
+  if (!K32GetModuleInformation(GetCurrentProcess(), hmod, &mod_info, sizeof(MODULEINFO))) {
+      return 0;
+  }
+
+  const DWORD image_size{ mod_info.SizeOfImage };
+
+  if (!image_size) {
+      return 0;
+  }
+
+  const std::vector<int> pattern_bytes{ sigToBytes(signature) };
+  const unsigned char* const image_bytes{ reinterpret_cast<unsigned char*>(hmod) };
+  const size_t signature_size{ pattern_bytes.size() };
+  const int* signature_bytes{ pattern_bytes.data() };
+
+  for (DWORD i{}; i < image_size - signature_size; ++i)
+  {
+      bool byte_sequence_found{ true };
+
+      for (DWORD j{}; j < signature_size; ++j)
+      {
+          if (image_bytes[i + j] != signature_bytes[j] && signature_bytes[j] != -1) {
+              byte_sequence_found = false;
+              break;
+          }
+      }
+
+      if (byte_sequence_found) {
+          return reinterpret_cast<uintptr_t>(&image_bytes[i]);
+      }
+  }
+
+  return 0x0;
 }
 //===================================================================================
 HMODULE CSignature::GetModuleHandleSafe( const char* pszModuleName )

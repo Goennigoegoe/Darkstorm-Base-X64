@@ -318,6 +318,8 @@ public:
   {
     static uintptr_t offset = gSignatures.dwFindPattern("vguimatsurface.dll", "40 53 56 57 48 83 EC ? 48 8B F9 80 3D");
     reinterpret_cast<void(__thiscall*)(void*)>(offset)(this);
+
+    //reinterpret_cast<void(__thiscall*)(void*)>(gSignatures.dwFindPattern("vguimatsurface.dll", "40 53 56 57 48 83 EC ? 48 8B F9 80 3D"))(this);
   }
 
   void FinishDrawing()

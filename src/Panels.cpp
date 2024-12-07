@@ -74,11 +74,14 @@ void __fastcall Hooked_PaintTraverse( void* rcx, int mode )
     FirstInitialize = false;
   }
 
-  gInts.Surface->StartDrawing();
+  if(mode & PAINT_UIPANELS)
   {
-		gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm"); //Remove this if you want.
+    gInts.Surface->StartDrawing();
+    {
+      gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 200, gDrawManager.dwGetTeamColor(3), "Welcome to Darkstorm"); //Remove this if you want.
+    }
+    gInts.Surface->FinishDrawing();
   }
-  gInts.Surface->FinishDrawing();
 }
 
 void __fastcall Hooked_Paint(void* rcx, int mode)

@@ -5,7 +5,7 @@
 class CSignature
 {
 public:
-	DWORD dwFindPattern(const char* module_name, const char* signature);
+	uintptr_t dwFindPattern(const char* module_name, const char* signature);
 	HMODULE GetModuleHandleSafe( const char* pszModuleName );
 	DWORD GetClientSignature ( const char* chPattern );
 	DWORD GetEngineSignature ( const char* chPattern );

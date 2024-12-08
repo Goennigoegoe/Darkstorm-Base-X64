@@ -19,11 +19,6 @@ using namespace std;
 typedef void* ( __cdecl* CreateInterface_t )( const char*, int* );
 typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
 
-#define VMTManager toolkit::VMTManager
-#define VMTBaseManager toolkit::VMTBaseManager
-
-#define WIN32_LEAN_AND_MEAN
-#pragma optimize("gsy",on)
 #pragma warning( disable : 4244 ) //Possible loss of data
 
 typedef float matrix3x4[3][4];

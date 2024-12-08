@@ -4,7 +4,6 @@ A base for Team Fortress 2's 64-bit version, based off of the DarkStorm 2015 bas
 Original base can be found at [DarkStorm-2015-Base](https://bitbucket.org/gir489/darkstorm-2015-base/src/master/). \
 This does not have any features other than some hooks and basic game stuff.
 ### Some stuff may not work properly / may crash.
-### Looping through entities not working correctly. 
 
 ---
 

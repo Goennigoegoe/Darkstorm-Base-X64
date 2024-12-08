@@ -3,6 +3,7 @@
 #include "include/CDrawManager.h"
 
 #include <iostream>
+#include <string>
 
 CScreenSize gScreenSize;
 
@@ -137,6 +138,8 @@ void __fastcall Hooked_Paint(void* rcx, int mode)
           gDrawManager.DrawString( vecScreen.x, vecScreen.y, 0xFFFFFFFF, "You" ); //Draw on the player.
         }
 
+        //int LastY = 275;
+
         for(int i = 1; i < gInts.EntList->GetHighestEntityIndex(); i++)
         {
           CBaseEntity* pEnt = gInts.EntList->GetClientEntity(i)->As<CBaseEntity>();
@@ -149,19 +152,40 @@ void __fastcall Hooked_Paint(void* rcx, int mode)
           if(!pEnt->IsPlayer())
           {
             //std::cout << "Not A Player\n";
+            
+            //Vector pEntWorld, pEntScreen;
+            //pEnt->GetWorldSpaceCenter(pEntWorld);
+
+            //if ( gDrawManager.WorldToScreen(pEntWorld, pEntScreen) )
+              //gDrawManager.DrawString( pEntScreen.x, pEntScreen.y, 0xFFFFFFFF, "Not A Player" ); //Draw on the player.
+
+
+            continue;
           }
 
-          gDrawManager.DrawString( 50, 50, 0xFFFFFFFF, "Player" ); //Draw on the player.
+          //char* name = pEnt->GetClientClass()->chName;
+          //std::string EntText("Entity: ");
+          //EntText += name;
+
+          //gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, LastY, 0x0000FFFF, pEnt->GetClientClass()->chName );
+          //LastY += 15;
+
+          //gDrawManager.DrawString( 50, 50, 0xFFFFFFFF, "Player" ); //Draw on the player.
           
           Vector pEntWorld, pEntScreen;
           pEnt->GetWorldSpaceCenter(pEntWorld);
 
-          if ( gDrawManager.WorldToScreen(vecWorld, vecScreen) )
+          if ( gDrawManager.WorldToScreen(pEntWorld, pEntScreen) )
           {
             //printf("Pos: %.2f %.2f", pEntScreen.x, pEntScreen.y);
-            gDrawManager.DrawString( vecScreen.x, vecScreen.y, 0xFFFFFFFF, "Player" ); //Draw on the player.
+            gDrawManager.DrawString( pEntScreen.x, pEntScreen.y, 0xFFFFFFFF, "Player" ); //Draw on the player.
           }
         }
+
+        /*std::string Entities("Highest Entity Index: ");
+        Entities += std::to_string(gInts.EntList->GetHighestEntityIndex());
+
+        gDrawManager.DrawString( (gScreenSize.iScreenWidth / 2) - 55, 250, 0xFF0000FF, Entities.c_str() );*/
       }
     }
     gInts.Surface->FinishDrawing();

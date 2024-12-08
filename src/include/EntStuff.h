@@ -15,7 +15,10 @@ class IClientRenderable;
 class IClientEntity;
 class IClientThinkable;
 
-class ClientClass
+typedef IClientNetworkable* (*CreateClientClassFn)(int entnum, int serialNum);
+typedef IClientNetworkable* (*CreateEventFn)();
+
+/*class ClientClass
 {
 private:
 	BYTE _chPadding[8];
@@ -24,6 +27,23 @@ public:
 	RecvTable* Table;
 	ClientClass* pNextClass;
 	int iClassID;
+};*/
+
+typedef IClientNetworkable* (*CreateClientClassFn)(int entnum, int serialNum);
+typedef IClientNetworkable* (*CreateEventFn)();
+
+class ClientClass
+{
+public:
+	const char* GetName() { return m_pNetworkName; }
+
+public:
+	CreateClientClassFn	m_pCreateFn;
+	CreateEventFn m_pCreateEventFn;
+	const char* m_pNetworkName;
+	RecvTable* m_pRecvTable;
+	ClientClass* m_pNext;
+	int m_ClassID;
 };
 
 class IHandleEntity
@@ -164,7 +184,7 @@ public:
 	inline ETFClassID GetClassID()
 	{
 		if (auto pClientClass = GetClientClass())
-			return static_cast<ETFClassID>(pClientClass->iClassID);
+			return static_cast<ETFClassID>(pClientClass->m_ClassID);
 
 		return static_cast<ETFClassID>(0);
 	}

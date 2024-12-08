@@ -14,6 +14,8 @@
 #include "../dependencies/MinHook/MinHook.h"
 #include "EntStuff.h"
 
+#include "CNetVar.h"
+
 using namespace std;
 
 typedef void* ( __cdecl* CreateInterface_t )( const char*, int* );
@@ -53,16 +55,6 @@ typedef struct player_info_s
 	unsigned char	filesDownloaded;
 } player_info_t;
 
-class CHLClient
-{
-public:
-	ClientClass* GetAllClasses( void )
-	{
-		typedef ClientClass* ( __thiscall* OriginalFn )( PVOID ); //Anything inside a VTable is a __thiscall unless it completly disregards the thisptr. You can also call them as __stdcalls, but you won't have access to the __thisptr.
-		return find_vfunc<OriginalFn>( this, 8 )( this ); //Return the pointer to the head CClientClass.
-	}
-};
-
 class CGlobals
 {
 public:
@@ -86,7 +78,7 @@ public:
 	Vector viewangles; //C
 	float forwardmove; //18
 	float sidemove; //1C
-	float upmove; //20
+	float upmove; //20BaseClientDLL
 	int	buttons; //24
 	unsigned char impulse; //28
 	int weaponselect; //2C
@@ -102,6 +94,52 @@ public:
 class CBaseEntity : public IClientEntity
 {
 public:
+
+  NETVAR(m_flAnimTime, float, "CBaseEntity", "m_flAnimTime");
+	NETVAR(m_flSimulationTime, float, "CBaseEntity", "m_flSimulationTime");
+	NETVAR(m_ubInterpolationFrame, int, "CBaseEntity", "m_ubInterpolationFrame");
+	NETVAR(m_vecOrigin, Vector, "CBaseEntity", "m_vecOrigin");
+	NETVAR(m_angRotation, Vector, "CBaseEntity", "m_angRotation");
+	NETVAR(m_nModelIndex, int, "CBaseEntity", "m_nModelIndex");
+	NETVAR(m_fEffects, int, "CBaseEntity", "m_fEffects");
+	NETVAR(m_nRenderMode, int, "CBaseEntity", "m_nRenderMode");
+	NETVAR(m_nRenderFX, int, "CBaseEntity", "m_nRenderFX");
+	//NETVAR(m_clrRender, Color_t, "CBaseEntity", "m_clrRender");
+	NETVAR(m_iTeamNum, int, "CBaseEntity", "m_iTeamNum");
+	NETVAR(m_CollisionGroup, int, "CBaseEntity", "m_CollisionGroup");
+	NETVAR(m_flElasticity, float, "CBaseEntity", "m_flElasticity");
+	NETVAR(m_flShadowCastDistance, float, "CBaseEntity", "m_flShadowCastDistance");
+	//NETVAR(m_hOwnerEntity, EHANDLE, "CBaseEntity", "m_hOwnerEntity");
+	//NETVAR(m_hEffectEntity, EHANDLE, "CBaseEntity", "m_hEffectEntity");
+	NETVAR(moveparent, int, "CBaseEntity", "moveparent");
+	NETVAR(m_iParentAttachment, int, "CBaseEntity", "m_iParentAttachment");
+	//NETVAR(m_Collision, CCollisionProperty*, "CBaseEntity", "m_Collision");
+	NETVAR(m_vecMinsPreScaled, Vector, "CBaseEntity", "m_vecMinsPreScaled");
+	NETVAR(m_vecMaxsPreScaled, Vector, "CBaseEntity", "m_vecMaxsPreScaled");
+	NETVAR(m_vecMins, Vector, "CBaseEntity", "m_vecMins");
+	NETVAR(m_vecMaxs, Vector, "CBaseEntity", "m_vecMaxs");
+	NETVAR(m_nSolidType, int, "CBaseEntity", "m_nSolidType");
+	NETVAR(m_usSolidFlags, int, "CBaseEntity", "m_usSolidFlags");
+	NETVAR(m_nSurroundType, int, "CBaseEntity", "m_nSurroundType");
+	NETVAR(m_triggerBloat, int, "CBaseEntity", "m_triggerBloat");
+	NETVAR(m_bUniformTriggerBloat, bool, "CBaseEntity", "m_bUniformTriggerBloat");
+	NETVAR(m_vecSpecifiedSurroundingMinsPreScaled, Vector, "CBaseEntity", "m_vecSpecifiedSurroundingMinsPreScaled");
+	NETVAR(m_vecSpecifiedSurroundingMaxsPreScaled, Vector, "CBaseEntity", "m_vecSpecifiedSurroundingMaxsPreScaled");
+	NETVAR(m_vecSpecifiedSurroundingMins, Vector, "CBaseEntity", "m_vecSpecifiedSurroundingMins");
+	NETVAR(m_vecSpecifiedSurroundingMaxs, Vector, "CBaseEntity", "m_vecSpecifiedSurroundingMaxs");
+	NETVAR(m_iTextureFrameIndex, int, "CBaseEntity", "m_iTextureFrameIndex");
+	NETVAR(m_PredictableID, int, "CBaseEntity", "m_PredictableID");
+	NETVAR(m_bIsPlayerSimulated, bool, "CBaseEntity", "m_bIsPlayerSimulated");
+	NETVAR(m_bSimulatedEveryTick, bool, "CBaseEntity", "m_bSimulatedEveryTick");
+	NETVAR(m_bAnimatedEveryTick, bool, "CBaseEntity", "m_bAnimatedEveryTick");
+	NETVAR(m_bAlternateSorting, bool, "CBaseEntity", "m_bAlternateSorting");
+	NETVAR(m_nModelIndexOverrides, void*, "CBaseEntity", "m_nModelIndexOverrides");
+	NETVAR(movetype, int, "CBaseEntity", "movetype");
+	
+	NETVAR_OFF(m_flOldSimulationTime, float, "CBaseEntity", "m_flSimulationTime", 4);
+	//NETVAR_OFF(m_Particles, CParticleProperty*, "CBaseEntity", "m_flElasticity", -56);
+
+
 	Vector& GetAbsOrigin( )
 	{
 		typedef Vector& ( __thiscall* OriginalFn )( PVOID );
@@ -542,19 +580,3 @@ public:
 	virtual bool			IsGameUIVisible() = 0;
 };
 
-class CInterfaces
-{
-public:
-	CEntList* EntList;
-	EngineClient* Engine;
-	IPanel* Panels;
-	ISurface* Surface;
-	ClientModeShared* ClientMode;
-	CHLClient* Client;
-  IEngineVGui* EngineVGui;
-  //CMatSystemSurface* MatSystemSurface;
-};
-
-extern CInterfaces gInts;
-extern CPlayerVariables gPlayerVars;
-extern COffsets gOffsets;

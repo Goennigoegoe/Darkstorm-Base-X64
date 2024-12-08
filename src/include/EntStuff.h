@@ -5,6 +5,7 @@
 #include <xstring>
 #include "Vector.h"
 #include "getvfunc.h"
+#include "CNetVar.h"
 #include "ClassIDList.h"
 
 typedef float matrix3x4[3][4];
@@ -28,23 +29,6 @@ public:
 	ClientClass* pNextClass;
 	int iClassID;
 };*/
-
-typedef IClientNetworkable* (*CreateClientClassFn)(int entnum, int serialNum);
-typedef IClientNetworkable* (*CreateEventFn)();
-
-class ClientClass
-{
-public:
-	const char* GetName() { return m_pNetworkName; }
-
-public:
-	CreateClientClassFn	m_pCreateFn;
-	CreateEventFn m_pCreateEventFn;
-	const char* m_pNetworkName;
-	RecvTable* m_pRecvTable;
-	ClientClass* m_pNext;
-	int m_ClassID;
-};
 
 class IHandleEntity
 {
@@ -172,6 +156,8 @@ public:
 	virtual void NotifyShouldTransmit(ShouldTransmitState_t state) = 0;
 	virtual void OnPreDataChanged(DataUpdateType_t updateType) = 0;
 	virtual void OnDataChanged(DataUpdateType_t updateType) = 0;
+typedef IClientNetworkable* (*CreateClientClassFn)(int entnum, int serialNum);
+typedef IClientNetworkable* (*CreateEventFn)();
 	virtual void PreDataUpdate(DataUpdateType_t updateType) = 0;
 	virtual void PostDataUpdate(DataUpdateType_t updateType) = 0;
 	virtual bool IsDormant(void) = 0;
